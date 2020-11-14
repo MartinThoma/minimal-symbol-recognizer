@@ -11,7 +11,8 @@ itsdangerous==1.1.0       # via flask
 jinja2==2.11.2            # via flask
 keras==2.4.3              # via minimal_symbol_recognizer (setup.py)
 markupsafe==1.1.1         # via jinja2
-numpy==1.19.4             # via h5py, keras, scipy
+numpy==1.19.4             # via h5py, keras, minimal_symbol_recognizer (setup.py), scipy
+pillow==8.0.1             # via minimal_symbol_recognizer (setup.py)
 pyyaml==5.3.1             # via keras
 scipy==1.5.4              # via keras
 werkzeug==1.0.1           # via flask
