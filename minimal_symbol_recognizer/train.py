@@ -1,11 +1,13 @@
 # Core Library modules
 import csv
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Tuple
 
 # Third party modules
+import keras
 import numpy as np
 from PIL import Image
+from tensorflow.keras import layers
 
 
 def main(input_directory: Path, output_file: Path) -> None:
@@ -20,7 +22,12 @@ def main(input_directory: Path, output_file: Path) -> None:
         Path where the trained model is stored.
     """
     path2label = read_labels(input_directory / "hasy-data-labels.csv")
+    nb_classes = len(set(path2label.values()))
     images = read_images(input_directory / "hasy-data")
+    width = images.shape[1]
+    height = images.shape[2]
+    model = create_model((width, height, 1), nb_classes)
+    print(model.summary())
 
 
 def read_labels(labels_path: Path) -> Dict[Path, str]:
@@ -44,5 +51,24 @@ def read_images(images_directory: Path) -> np.ndarray:
             im_arr = np.array(im)
             images[index, :, :] = im_arr
         if index % 1000 == 0:
-            print(f"{index/nb_images*100:3.0f}%: {index} out of {nb_images} done")
+            print(f"{index/nb_images*100:3.0f}%: {index:,} out of {nb_images:,} done")
     return images
+
+
+def create_model(
+    input_shape: Tuple[int, int, int], num_classes: int
+) -> keras.Sequential:
+    # See https://keras.io/examples/vision/mnist_convnet/
+    model = keras.Sequential(
+        [
+            keras.Input(shape=input_shape),
+            layers.Conv2D(32, kernel_size=(3, 3), activation="relu"),
+            layers.MaxPooling2D(pool_size=(2, 2)),
+            layers.Conv2D(64, kernel_size=(3, 3), activation="relu"),
+            layers.MaxPooling2D(pool_size=(2, 2)),
+            layers.Flatten(),
+            layers.Dropout(0.5),
+            layers.Dense(num_classes, activation="softmax"),
+        ]
+    )
+    return model
