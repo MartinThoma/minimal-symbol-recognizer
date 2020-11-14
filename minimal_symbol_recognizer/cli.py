@@ -22,12 +22,15 @@ def entry_point():
 @click.option(
     "--in",
     "input_path",
-    type=click.Path(exists=True, file_okay=True, dir_okay=False, readable=True),
+    # metavar="HASYv2-Directory",
+    type=click.Path(exists=True, file_okay=False, dir_okay=True, readable=True),
+    help="The HASYv2 directory, extracted from the HASYv2.tar.gz",
 )
 @click.option(
     "--out",
     "output_path",
     type=click.Path(exists=False, file_okay=True, dir_okay=False, writable=True),
+    help="The trained model",
 )
 def train(input_path: str, output_path: str) -> None:
     """Train a symbol recognition model."""
