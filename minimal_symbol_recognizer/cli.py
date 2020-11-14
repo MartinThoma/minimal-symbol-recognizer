@@ -30,6 +30,7 @@ def entry_point():
     type=click.Path(exists=False, file_okay=True, dir_okay=False, writable=True),
 )
 def train(input_path: str, output_path: str) -> None:
+    """Train a symbol recognition model."""
     train_main(Path(input_path), Path(output_path))
 
 
@@ -39,4 +40,5 @@ def train(input_path: str, output_path: str) -> None:
     type=click.Path(exists=False, file_okay=True, dir_okay=False, writable=True),
 )
 def run_server(model: str) -> None:
+    """Start a local Flask development server to use the model."""
     run_test_server(Path(model))
