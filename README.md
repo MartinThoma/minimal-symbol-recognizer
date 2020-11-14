@@ -1,40 +1,18 @@
 # minimal_symbol_recognizer
 
-TODO: Explain in at most 140 characters what this project is.
-
-## TODO after cloning this
-
-```bash
-# Make it a git repository
-$ git init
-
-# Add the link to a server
-$ git remote add origin git@github.com:MartinThoma/awesome_project.git
-
-# Initialize the virtual environment
-$ pipenv --python 3.8
-
-# Import the requirements
-$ pipenv install -r requirements.txt
-
-# Import the dev requirements
-$ pipenv install --dev --pre -r requirements-dev.txt
-
-# Make sure the repository stays that nice
-$ pre-commit install
-
-# Fill out all TODOs
-$ grep -rnI "TODO" *
-
-# Delete this TODO section
-```
+Train and use a classifier for handwritten symbols.
 
 ## Installation
 
 ```
-$ pip install .
+$ pip install git+https://github.com/MartinThoma/minimal-symbol-recognizer
 ```
 
 ## Usage
 
-TODO: Show a minimal example how this is useful
+Download the [`HASYv2.tar.bz2`](https://zenodo.org/record/259444). Then:
+
+```
+$ minimal_symbol_recognizer train --in HASYv2.tar.bz2 --out model.h5
+$ minimal_symbol_recognizer run-server --model model.h5
+```
