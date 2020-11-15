@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>Minimal Symbol Recognizer</title>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
         <script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.4.0/fabric.min.js'></script>
         <style type='text/css'>
             #sheet {
@@ -13,6 +14,26 @@
                 canvas.isDrawingMode = true;
                 canvas.freeDrawingBrush.width = 5;
                 canvas.freeDrawingBrush.color = "#ff0000";
+                canvas.on("mouse:up", sendToServer);
+
+                function sendToServer() {
+                    var dataURL = canvas.toDataURL({
+                        width: canvas.width,
+                        height: canvas.height,
+                        left: 0,
+                        top: 0,
+                        format: 'png',
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "classify",
+                        data: {
+                            imgBase64: dataURL
+                        }
+                    }).done(function (o) {
+                        console.log(o);
+                    });
+                }
             }
         </script>
     </head>
