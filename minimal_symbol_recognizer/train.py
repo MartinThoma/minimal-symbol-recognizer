@@ -53,16 +53,23 @@ def read_labels(labels_path: Path) -> Dict[Path, str]:
 
 
 def read_images(image_paths: List[Path]) -> np.ndarray:
-    nb_images = len(image_paths)
-    width = 32
-    height = 32
-    images = np.zeros((nb_images, width, height))
-    for index, image_path in enumerate(image_paths):
-        image = Image.open(image_path)
-        images[index, :, :] = preprocess(image)
-        image.close()
-        if index % 1000 == 0:
-            print(f"{index/nb_images*100:3.0f}%: {index:,} out of {nb_images:,} done")
+    cache_file = Path("images.npy")
+    if not cache_file.is_file():
+        nb_images = len(image_paths)
+        width = 32
+        height = 32
+        images = np.zeros((nb_images, width, height))
+        for index, image_path in enumerate(image_paths):
+            image = Image.open(image_path)
+            images[index, :, :] = preprocess(image)
+            image.close()
+            if index % 1000 == 0:
+                print(
+                    f"{index/nb_images*100:3.0f}%: {index:,} out of {nb_images:,} done"
+                )
+        np.save(cache_file, images)
+    else:
+        images = np.load(cache_file)
     return images
 
 
@@ -86,6 +93,8 @@ def create_model(
         [
             keras.Input(shape=input_shape),
             layers.Conv2D(32, kernel_size=(3, 3), activation="relu"),
+            layers.MaxPooling2D(pool_size=(2, 2)),
+            layers.Conv2D(64, kernel_size=(3, 3), activation="relu"),
             layers.MaxPooling2D(pool_size=(2, 2)),
             layers.Flatten(),
             layers.Dropout(0.5),
