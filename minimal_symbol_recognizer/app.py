@@ -30,7 +30,13 @@ def create_app(model: Path, labels: Path) -> Flask:
         image.close()
         for pred in predictions[:5]:
             print(pred)  # TODO: Just temporarily added
-        return {"errors": [], "prediction": predictions[:5]}
+        return {
+            "errors": [],
+            "prediction": [
+                {"symbol": pred, "probability": f"{prob * 100:.0f}%"}
+                for pred, prob in predictions[:5]
+            ],
+        }
 
     return app
 

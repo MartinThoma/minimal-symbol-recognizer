@@ -30,8 +30,16 @@
                         data: {
                             imgBase64: dataURL
                         }
-                    }).done(function (o) {
-                        console.log(o);
+                    }).done(function (data) {
+                        console.log(data);
+                        var content = "<table class='table' role='table' name='resulttable' id='resulttable'>";
+                        content += "<thead><tr><th>Symbol</th><th>%</th></tr></thead><tbody>";
+                        $.each(data['prediction'], function (index, value) {
+                            content += "<tr><td>" + value['symbol'] + "</td><td>" + value['probability'] + "</td></tr>";
+                        }
+                        );
+                        content += "</tbody></table>";
+                        document.getElementById('classification-results').innerHTML = content;
                     });
                 }
             }
@@ -40,5 +48,7 @@
     <body>
         <h1>Recognize this symbol</h1>
         <canvas id="sheet" width="400" height="400"></canvas>
+        <h2>Results</h2>
+        <div id="classification-results"></div>
     </body>
 </html>
