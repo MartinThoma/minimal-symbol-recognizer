@@ -10,9 +10,6 @@ from typing import Any, Dict
 from flask import Flask, render_template, request
 from PIL import Image
 
-# First party modules
-from minimal_symbol_recognizer.predict import predict
-
 
 def create_app(model: Path, labels: Path) -> Flask:
     app = Flask(__name__)
@@ -23,6 +20,9 @@ def create_app(model: Path, labels: Path) -> Flask:
 
     @app.route("/classify", methods=["POST"])
     def classify() -> Dict[str, Any]:
+        # First party modules
+        from minimal_symbol_recognizer.predict import predict
+
         imagestr = request.form["imgBase64"]
         decoded = base64.b64decode(imagestr.split(",")[1])
         image = Image.open(io.BytesIO(decoded))
