@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Minimal Symbol Recognizer</title>
+        <script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.4.0/fabric.min.js'></script>
+        <style type='text/css'>
+            #sheet {
+                border: 1px solid black;
+            }
+        </style>
+        <script type='text/javascript'>
+            window.onload = function () {
+                var canvas = new fabric.Canvas('sheet');
+                canvas.isDrawingMode = true;
+                canvas.freeDrawingBrush.width = 5;
+                canvas.freeDrawingBrush.color = "#ff0000";
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Recognize this symbol</h1>
+        <canvas id="sheet" width="400" height="400"></canvas>
+    </body>
+</html>

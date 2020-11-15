@@ -4,7 +4,7 @@
 from pathlib import Path
 
 # Third party modules
-from flask import Flask
+from flask import Flask, render_template
 
 model = None
 
@@ -19,7 +19,7 @@ def create_app() -> Flask:
 
     @app.route("/")
     def index():
-        return "Hello world!"
+        return render_template("index.html")
 
     return app
 
