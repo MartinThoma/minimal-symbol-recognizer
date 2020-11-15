@@ -48,6 +48,12 @@ def train(input_path: str, output_path: str) -> None:
     required=True,
     help="A model file. This could be the output of the 'train' subcommand",
 )
-def run_server(model: str) -> None:
+@click.option(
+    "--labels",
+    type=click.Path(exists=True, file_okay=True, dir_okay=False, readable=True),
+    required=True,
+    help="A labels. file. This could be the output of the 'train' subcommand",
+)
+def run_server(model: str, labels: str) -> None:
     """Start a local Flask development server to use the model."""
-    run_test_server(Path(model))
+    run_test_server(Path(model), Path(labels))

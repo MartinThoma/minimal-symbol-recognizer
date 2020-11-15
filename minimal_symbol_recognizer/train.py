@@ -9,6 +9,9 @@ import numpy as np
 from PIL import Image
 from tensorflow.keras import layers
 
+# First party modules
+from minimal_symbol_recognizer.preprocess import preprocess
+
 
 def main(input_directory: Path, output_file: Path) -> None:
     """
@@ -31,8 +34,7 @@ def main(input_directory: Path, output_file: Path) -> None:
     height = images.shape[2]
     model = create_model((width, height, 1), nb_classes)
     print(model.summary())
-    x_train = images / 255
-    x_train = np.expand_dims(x_train, -1)
+    x_train = np.expand_dims(images, -1)
     y_train = np.array([label2index[label] for label in labels])
     y_train = keras.utils.to_categorical(y_train, nb_classes)
     train_model(model, x_train, y_train)
@@ -56,9 +58,9 @@ def read_images(image_paths: List[Path]) -> np.ndarray:
     height = 32
     images = np.zeros((nb_images, width, height))
     for index, image_path in enumerate(image_paths):
-        with Image.open(image_path).convert(mode="L") as im:
-            im_arr = np.array(im, dtype=np.float)
-            images[index, :, :] = im_arr
+        image = Image.open(image_path)
+        images[index, :, :] = preprocess(image)
+        image.close()
         if index % 1000 == 0:
             print(f"{index/nb_images*100:3.0f}%: {index:,} out of {nb_images:,} done")
     return images
@@ -66,7 +68,14 @@ def read_images(image_paths: List[Path]) -> np.ndarray:
 
 def get_indices(labels: Set[str]) -> Dict[str, int]:
     labels_list = sorted(labels)
+    save_labels(labels_list, Path("labels.csv"))
     return {label: index for index, label in enumerate(labels_list)}
+
+
+def save_labels(labels: List[str], labels_path: Path) -> None:
+    with open(labels_path, "w") as fp:
+        for label in labels:
+            fp.write(f"{label}\n")
 
 
 def create_model(
