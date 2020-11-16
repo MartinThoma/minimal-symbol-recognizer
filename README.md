@@ -38,3 +38,15 @@ Commands:
   run-server  Start a local Flask development server to use the model.
   train       Train a symbol recognition model.
 ```
+
+### Usage with Docker
+
+[Install Docker](https://docs.docker.com/get-docker/) first. Then go into this directory and
+run:
+
+```
+$ docker build -t symbol_recognizer_service .
+$ docker run -p 5000:5000 symbol_recognizer_service
+```
+
+You might need `sudo` (root privileges) to run Docker. [More information about Docker](https://martin-thoma.com/docker/)
