@@ -49,4 +49,12 @@ $ docker build -t symbol_recognizer_service .
 $ docker run -p 5000:5000 symbol_recognizer_service
 ```
 
+If you don't want to build it, you can also use [themoosemind
+/
+symbol_recognizer_service](https://hub.docker.com/repository/docker/themoosemind/symbol_recognizer_service):
+
+```
+$ docker run -p 5000:5000 themoosemind/symbol_recognizer_service
+```
+
 You might need `sudo` (root privileges) to run Docker. [More information about Docker](https://martin-thoma.com/docker/)
